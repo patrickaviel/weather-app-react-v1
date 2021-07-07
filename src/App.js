@@ -15,7 +15,8 @@ class App extends React.Component {
             longitude: 50
         },
         data: {},
-        region: ""
+        region: "",
+        error: false
     }
 
     componentDidMount() {
@@ -81,18 +82,28 @@ class App extends React.Component {
 
                 this.setState({ data: regionWeather });
             })
+            .catch((err)=>{
+                this.setState({error:true});
+            });
     }
-
+   
     render(){
         return(
             <div className="app">
                 <Navbar changeRegion={this.changeRegion} changeLocation={this.changeLocation} />
+                {
+                    (this.state.error === true) ? (
+                        <div className="alert alert-danger container mx-auto" role="alert">Location not Available!</div>
+                    ):(
+                        ""
+                    )
+                }
                 {(typeof this.state.data != 'undefined') ? (
                     <WeatherInfo data={this.state.data} />
-                ): (
+                ):(
                     <p className="lead text-center">Loading....</p>
                 )}
-                
+
                 <Footer />
             </div>
         )
